@@ -10,4 +10,3 @@ This directory contains the source code for the project.
  - [`libs/`](libs/) - Core system libraries
  - [`specs/`](specs/) - Implementation of standard interfaces/specifications
  - [`srvs/`](srvs/) - Core system services
- - [`web/`](web/) - The Vaev browser engine

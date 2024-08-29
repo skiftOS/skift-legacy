@@ -49,7 +49,5 @@ A collection of project, app, and other ideas to be developed in the future.
 * **Virtio Support**
 * **Browser Engine**
    * JavaScript Engine
-* **karm-layout: Core layout engine (based on vaev-layout)**
-* **karm-paint: Core compositing and painting (based on vaev-paint)**
 * **hideo-console: Terminal emulator**
    * Shell
