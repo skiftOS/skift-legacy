@@ -10,7 +10,6 @@
 namespace Karm::Kira {
 
 static constexpr Str LICENSE = R"(Copyright © 2018-2024, the skiftOS Developers
-Copyright © 2024, Odoo S.A.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -34,7 +33,6 @@ Ui::Child aboutDialog(String name) {
         dialogHeader({
             Ui::hflow(6, Math::Align::CENTER, dialogTitle(name), versionBadge()),
             dialogDescription("Copyright © 2018-2024 The skiftOS Developers\n"
-                              "Copyright © 2024 Odoo S.A.\n"
                               "\n"
                               "All rights reserved."s),
         }),

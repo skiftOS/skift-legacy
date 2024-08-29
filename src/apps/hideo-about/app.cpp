@@ -21,7 +21,6 @@ Ui::Child app() {
 
             auto bodyText = Ui::bodySmall(
                 "Copyright © 2018-2024 The skiftOS Developers\n"
-                "Copyright © 2024 Odoo S.A.\n"
                 "\n"
                 "All rights reserved."
             );
