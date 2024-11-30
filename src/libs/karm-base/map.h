@@ -136,6 +136,26 @@ struct Map {
     void clear() {
         _els.clear();
     }
+
+    bool operator==(Map const &other) const {
+        if (_els.len() != other._els.len()) {
+            return false;
+        }
+
+        for (auto &[k, v] : _els) {
+            if (auto ov = other.access(k)) {
+                if (v != *ov) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    auto operator<=>(Map const &other) const = delete;
 };
 
 } // namespace Karm

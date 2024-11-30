@@ -76,10 +76,10 @@ struct Iter {
         }
     }
 
-    constexpr auto find(auto f) {
+    constexpr auto find(auto f) -> Item {
         for (auto item = next(); item; item = next()) {
             if (f(*item)) {
-                return *item;
+                return item;
             }
         }
 
@@ -284,7 +284,8 @@ struct Iter {
     }
 
     constexpr auto collect() {
-        forEach([&](auto const&...) {});
+        forEach([&](auto const &...) {
+        });
     }
 
     template <typename C>

@@ -257,6 +257,11 @@ struct None {
     bool operator==(None const &) const = default;
 
     auto operator<=>(None const &) const = default;
+
+    template <typename T>
+    operator T *() const {
+        return nullptr;
+    }
 };
 
 constexpr inline auto NONE = None{};

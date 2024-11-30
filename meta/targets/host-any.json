@@ -25,7 +25,10 @@
             "cmd": "{shell.latest('clang')}"
         },
         "cxx": {
-            "cmd": "{shell.latest('clang++')}"
+            "cmd": "{shell.latest('clang++')}",
+            "args": [
+                "-ftemplate-backtrace-limit=32"
+            ]
         },
         "ld": {
             "cmd": "{shell.latest('clang++')}"

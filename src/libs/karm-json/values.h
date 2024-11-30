@@ -15,7 +15,7 @@ using Array = Vec<Value>;
 
 using Object = Map<String, Value>;
 
-using Integer = isize;
+using Integer = i64;
 
 #ifndef __ck_freestanding__
 using Number = f64;
@@ -97,6 +97,28 @@ struct Value {
         _store = b;
         return *this;
     }
+
+    auto operator<=>(Value const &other) const {
+        return _store <=> other._store;
+    }
+
+    bool operator==(None) const {
+        return isNull();
+    }
+
+    bool operator==(String s) const {
+        return isStr() and asStr() == s;
+    }
+
+    bool operator==(Integer i) const {
+        return isInt() and asInt() == i;
+    }
+
+#ifndef __ck_freestanding__
+    bool operator==(Number d) const {
+        return isFloat() and asFloat() == d;
+    }
+#endif
 
     bool isNull() const {
         return _store.is<None>();
@@ -260,6 +282,14 @@ struct Value {
             return NONE;
         }
         return asArray()[index];
+    }
+
+    Value operator[](Str key) const {
+        return get(key);
+    }
+
+    Value operator[](usize index) const {
+        return get(index);
     }
 
     usize len() const {
