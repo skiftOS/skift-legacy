@@ -1,6 +1,6 @@
 {
     "$schema": "https://schemas.cute.engineering/stable/cutekit.manifest.component.v1",
-    "id": "vaev-script.cli",
+    "id": "vaev-script.main",
     "type": "exe",
     "description": "ECMAScript engine testing tool",
     "requires": [
