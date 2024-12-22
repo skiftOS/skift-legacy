@@ -361,6 +361,39 @@ struct _Promise : Meta::NoCopy {
 template <typename V = None, typename E = Error>
 using Promise = _Promise<Res<V, E>>;
 
+// MARK: Queue -----------------------------------------------------------------
+
+template <typename T>
+struct Queue {
+    struct Listener : public Resumable {
+        LlItem<Listener> item;
+    };
+
+    Vec<T> _buffer;
+    Ll<Listener> _listeners;
+
+    void equeue(T value) {
+        if (_listeners.empty()) {
+            _buffer.pushBack(std::move(value));
+            return;
+        }
+ 
+        //TODO
+    }
+
+    _Future<T> dequeueAsync();
+
+    Opt<T> dequeue() {
+        if (_buffer.empty())
+            return NONE;
+        return _buffer.popFont();
+    }
+
+    bool empty() const {
+        return _buffer.empty();
+    }
+};
+
 // MARK: Task ------------------------------------------------------------------
 
 enum struct Cfp {
@@ -428,7 +461,8 @@ struct _Task {
 
     _Task(_Task const &other) = delete;
 
-    _Task(_Task &&other) : _coro(std::exchange(other._coro, nullptr)) {}
+    _Task(_Task &&other)
+        : _coro(std::exchange(other._coro, nullptr)) {}
 
     _Task &operator=(_Task const &other) = delete;
 

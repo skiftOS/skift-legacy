@@ -172,16 +172,32 @@ static inline Async::Task<Message> rpcRecvAsync(Sys::IpcConnection &con) {
 
 struct Rpc : Meta::Pinned {
     Sys::IpcConnection _con;
-    bool _receiving = false;
     Map<u64, Async::_Promise<Message>> _pending{};
+    Async::Queue<Message> _incoming{};
     u64 _seq = 1;
+    Async::Task<> _receiver;
 
     Rpc(Sys::IpcConnection con)
-        : _con(std::move(con)) {}
+        : _con(std::move(con)), _receiver{_receiverTask(*this)} {}
 
     static Rpc create(Sys::Context &ctx) {
         auto &channel = useChannel(ctx);
         return Rpc{std::move(channel.con)};
+    }
+
+    static Async::Task<> _receiverTask(Rpc &rpc) {
+        while (true) {
+            Message msg = co_trya$(rpcRecvAsync(rpc._con));
+
+            auto header = msg._header;
+
+            if (rpc._pending.has(header.seq)) {
+                auto promise = rpc._pending.take(header.seq);
+                promise.resolve(std::move(msg));
+            } else {
+                rpc._incoming.equeue(std::move(msg));
+            }
+        }
     }
 
     template <typename T, typename... Args>
@@ -190,27 +206,7 @@ struct Rpc : Meta::Pinned {
     }
 
     Async::Task<Message> recvAsync() {
-        if (_receiving)
-            co_return Error::other("already receiving");
-
-        _receiving = true;
-        Defer defer{[this] {
-            _receiving = false;
-        }};
-
-        while (true) {
-            Message msg = co_trya$(rpcRecvAsync(_con));
-
-            auto header = msg._header;
-
-            if (_pending.has(header.seq)) {
-                auto promise = _pending.take(header.seq);
-                promise.resolve(std::move(msg));
-                continue;
-            }
-
-            co_return msg;
-        }
+        co_return _incoming.dequeueAsync();
     }
 
     template <typename T>
